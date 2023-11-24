@@ -3,11 +3,13 @@
     margin: 0;
 }
 
+canvas {
+    border: 2px dotted black;
+}
+
 canvas.center {
-    overflow-y: hidden;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 2px dotted black;
 }
