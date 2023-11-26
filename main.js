@@ -11,9 +11,12 @@ class Canvas {
     initiateContext(ctx="2d") {
         this.ctx = this.canvas.getContext(ctx);
     }
-    addChild(child=null,children=null) {
-        if (child != null && typeof child == CanvasItem) this.children.push(child);
-        if (children != null) for (let chld of children) if (typeof chld == CanvasItem) this.children.push(chld);
+    addChildren(children=[]) {
+        if (children != []) for (let chld of children) if (typeof chld == CanvasItem) this.children.push(chld);
+    }
+    update() {
+        this.clear();
+        for (let child of this.children) child.update();
     }
     clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -21,7 +24,11 @@ class Canvas {
 }
 
 class CanvasItem {
-    constructor(position=[0,0,0], dimensions=[0,0,0], velocity=[0,0,0]) {
+    constructor(
+        position=[0,0,0], // Position vector (x,y,z)
+        dimensions=[0,0,0], // Dimensions of item (width,height,depth)
+        velocity=[0,0,0] // Velocity vector (x,y,z)
+    ) {
         this.position = position;
         this.dimensions = dimensions; 
         this.velocity = velocity;
@@ -49,9 +56,9 @@ class CanvasItem {
 
 class Camera {
     constructor(
-        position=[0,0,0], // Position of Camera (may be different to body)
+        position=[0,0,0], // Position of Camera (x,y,z)
         focalLength=60, // Focal Length (perceived distance to objects)
-        angle=[0,0] // [Rotation Angle (no up or down), Angle of Elevation (or depression)]
+        angle=[0,0] // Angle of Camera (Side to Side Rotation Angle, Angle of Elevation [+] or Depression [-])
     ) {
         this.position = position;
         this.focalLength = focalLength;
@@ -60,4 +67,8 @@ class Camera {
 }
 
 
-const gameCanvas = new Canvas();
+const playerCam = new Camera();
+const playerObject = new CanvasItem([0,0,0], [10,10,10]);
+const gameCanvas = new Canvas(0.99, 0.99, true, playerCam);
+gameCanvas.initiateContext();
+gameCanvas.addChildren([playerObject]);
