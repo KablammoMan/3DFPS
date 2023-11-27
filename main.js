@@ -1,7 +1,10 @@
 class Canvas {
     constructor(xscal=0.99, yscal=0.99, cent=true, camera=new Camera(), children=[]) {
         this.canvas = document.createElement("canvas");
-        this.children = children;
+        this.children = {};
+        children.forEach(chld => {
+            this.children[Object.keys(this.children).length] = chld;
+        });
         this.camera = camera;
         this.canvas.width = window.innerWidth * xscal;
         this.canvas.height = window.innerHeight * yscal;
@@ -12,7 +15,7 @@ class Canvas {
         this.ctx = this.canvas.getContext(ctx);
     }
     addChildren(children=[]) {
-        if (children != []) for (let chld of children) if (typeof chld == CanvasItem) this.children.push(chld);
+        if (children != []) for (let chld of children) if (typeof chld == CanvasItem) this.children[Object.keys(this.children).length] = chld;
     }
     update() {
         this.clear();
